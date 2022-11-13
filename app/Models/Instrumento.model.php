@@ -22,18 +22,10 @@ class InstrumentoModel {
         return $instrumentoFilt;
     }
     public function PageOrder($limit, $offset){
-        $query = $this->db->prepare("SELECT * FROM instrumento LIMIT ? OFFSET ?");
-        $query->execute([$limit,$offset]);
+        $query = $this->db->prepare("SELECT * FROM instrumento LIMIT ? OFF ? $limit $offset");
+        $query->execute([]);
         $pagination = $query->fetchAll(PDO::FETCH_OBJ);
         return $pagination;
-    }
-
-     public function getInstrumentosByFamily($familia){
-         $query = $this->db->prepare ("SELECT instrumento.id, instrumento.instrumento, instrumento.precio, instrumento.descripcion, instrumento.familia  FROM instrumento JOIN familia
-         ON instrumento.id_fk = familia.id WHERE instrumento.id_fk= ");
-         $query->execute([$familia]);
-         $instrumentoByFam = $query->fetchAll(PDO::FETCH_OBJ);
-         return $instrumentoByFam;
     }
 
     public function get($id) {
@@ -44,15 +36,15 @@ class InstrumentoModel {
         return $instrumento;
     }
 
-    public function insert($instrumento, $precio, $descripcion,$familia) {
-        $query = $this->db->prepare("INSERT INTO instrumento (instrumento, precio, descripcion,familia) VALUES (?, ?, ?,?)");
-        $query->execute([$instrumento, $precio, $descripcion,$familia]);
+    public function insert($instrumento, $precio, $descripcion,$id_fk) {
+        $query = $this->db->prepare("INSERT INTO instrumento (instrumento, precio, descripcion,id_fk) VALUES (?, ?, ?,?)");
+        $query->execute([$instrumento, $precio, $descripcion,$id_fk]);
 
         return $this->db->lastInsertId();
     }
-    public function updateInstrumento ($id , $instrumento, $precio, $descripcion, $familia ){
+    public function updateInstrumento ($id , $instrumento, $precio, $descripcion, $id_fk ){
         $query = $this->db->prepare('UPDATE instrumento SET  instrumento = ?,precio= ? ,descripcion = ?, id_fk = ? WHERE id= ?');
-        $query->execute([$instrumento ,$precio,$descripcion,$familia,$id]);
+        $query->execute([$instrumento ,$precio,$descripcion,$id_fk,$id]);
     }
 
     public function delete($id) {

@@ -24,15 +24,20 @@ class InstrumentoApiController {
         $limit = '';
         $offset= '';
         $filt = '';
-           if (key_exists('start', $_GET )){
+        if (!array_key_exists('sort', $_GET) && !array_key_exists('order',$_GET) && !array_key_exists('limit', $_GET) && !array_key_exists('start',$_GET) ){
+            $instrumento = $this->model->getAll();
+            $this->view->response($instrumento);
+            }
+            else{
+           if (array_key_exists('start', $_GET )){
             $offset = $_GET['start'];
-           if (key_exists('limit' , $_GET)){
+           if (array_key_exists('limit' , $_GET)){
             $limit = $_GET['limit'];
             $pagination = $this->model->PageOrder($limit , $offset);
             $this->view->response($pagination);
            }
            else{
-              $this->view->response("Error al completar los input", 404);
+              $this->view->response("Error al completar los campos", 400);
            }
         }
            if(array_key_exists('sort', $_GET)){
@@ -44,21 +49,10 @@ class InstrumentoApiController {
             $this->view->response($instrumentoFilt);
             
            }
-        //   else{
-          //  $this->view->response("Error del servidor", 504); 
-         //  }
-            
-        
-           
-           if (array_key_exists('familia', $_GET)) {
-              $familia = $_GET['familia']; 
-              $instrumentosByFam = $this->model->getInstrumentosByFamily($familia);
-              $this->view->response($instrumentosByFam);
-             }
-            else {
-            $instrumento = $this->model->getAll();
-            $this->view->response($instrumento);
-            }
+           else{
+            $this->view->response("Error al completar los campos", 400); 
+           }   
+        }
         }
            
 
@@ -84,15 +78,15 @@ class InstrumentoApiController {
     public function insertInstrumento($params = null) {
         $Instrumento = $this->getData();
 
-        if (empty($Instrumento->instrumento) || empty($Instrumento->descripcion) || empty($Instrumento->precio)|| empty($Instrumento->familia)) {
+        if (empty($Instrumento->instrumento) || empty($Instrumento->descripcion) || empty($Instrumento->precio)|| empty($Instrumento->id_fk)) {
             $this->view->response("Complete los datos", 400);
         } else {
-            $id = $this->model->insert($Instrumento->instrumento, $Instrumento->descripcion, $Instrumento->precio,$Instrumento->familia);
+            $id = $this->model->insert($Instrumento->instrumento, $Instrumento->descripcion, $Instrumento->precio,$Instrumento->id_fk);
             $Instrumento = $this->model->get($id);
             $this->view->response($Instrumento, 201);
         }
     }
-    public function ModificarInstrumento($params = null){
+    public function ModInstrumento($params = null){
         $id = $params[':ID'];
         $instrumentoMod = $this->model->get($id);
         if($instrumentoMod){
@@ -100,8 +94,8 @@ class InstrumentoApiController {
             $instrumento = $body->instrumento;
             $precio = $body->precio;
             $descripcion = $body->descripcion;
-            $familia = $body->familia;
-            $instrumentoMod = $this->model->updateInstrumento($id,$instrumento,$precio,$descripcion,$familia);
+            $id_fk = $body->id_fk;
+            $instrumentoMod = $this->model->updateInstrumento($id,$instrumento,$precio,$descripcion,$id_fk);
             $this->view->response ("Instrumento id = $id Modificado con exito", 200);
         } else 
              $this->view->response("Instrumento con el id=$id no existe", 404);
