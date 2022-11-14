@@ -21,8 +21,8 @@ class InstrumentoModel {
         $instrumentoFilt = $query->fetchAll(PDO::FETCH_OBJ);
         return $instrumentoFilt;
     }
-    public function PageOrder($limit, $offset){
-        $query = $this->db->prepare("SELECT * FROM instrumento LIMIT ? OFF ? $limit $offset");
+    public function PageOrder($limit, $start_query){
+        $query = $this->db->prepare("SELECT * FROM instrumento LIMIT $limit $start_query");
         $query->execute([]);
         $pagination = $query->fetchAll(PDO::FETCH_OBJ);
         return $pagination;

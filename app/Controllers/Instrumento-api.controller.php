@@ -22,7 +22,7 @@ class InstrumentoApiController {
 
     public function getInstrumentos() { 
         $limit = '';
-        $offset= '';
+        $start= '';
         $filt = '';
         if (!array_key_exists('sort', $_GET) && !array_key_exists('order',$_GET) && !array_key_exists('limit', $_GET) && !array_key_exists('start',$_GET) ){
             $instrumento = $this->model->getAll();
@@ -30,16 +30,21 @@ class InstrumentoApiController {
             }
             else{
            if (array_key_exists('start', $_GET )){
-            $offset = $_GET['start'];
+            $start = $_GET['start'];
            if (array_key_exists('limit' , $_GET)){
             $limit = $_GET['limit'];
-            $pagination = $this->model->PageOrder($limit , $offset);
+            $query = [
+                $start => "OFFSET $start"
+            ];
+             $start_query = $query[$start];
+            $pagination = $this->model->PageOrder($limit , $start_query);
             $this->view->response($pagination);
            }
+        }
            else{
               $this->view->response("Error al completar los campos", 400);
            }
-        }
+        
            if(array_key_exists('sort', $_GET)){
             $filt = $_GET['sort'];
            if (array_key_exists('order', $_GET))
@@ -47,7 +52,6 @@ class InstrumentoApiController {
             $filt = " ORDER BY " . $filt;
             $instrumentoFilt = $this->model->OrderBy($filt);
             $this->view->response($instrumentoFilt);
-            
            }
            else{
             $this->view->response("Error al completar los campos", 400); 
@@ -96,7 +100,7 @@ class InstrumentoApiController {
             $descripcion = $body->descripcion;
             $id_fk = $body->id_fk;
             $instrumentoMod = $this->model->updateInstrumento($id,$instrumento,$precio,$descripcion,$id_fk);
-            $this->view->response ("Instrumento id = $id Modificado con exito", 200);
+            $this->view->response ("Instrumento id = $id Modificado con exito", 201);
         } else 
              $this->view->response("Instrumento con el id=$id no existe", 404);
         
