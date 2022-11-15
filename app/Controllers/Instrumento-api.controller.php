@@ -39,11 +39,12 @@ class InstrumentoApiController {
              $start_query = $query[$start];
             $pagination = $this->model->PageOrder($limit , $start_query);
             $this->view->response($pagination);
+            die();
            }
         }
            else{
               $this->view->response("Error al completar los campos", 400);
-           }
+          }
         
            if(array_key_exists('sort', $_GET)){
             $filt = $_GET['sort'];
@@ -52,10 +53,12 @@ class InstrumentoApiController {
             $filt = " ORDER BY " . $filt;
             $instrumentoFilt = $this->model->OrderBy($filt);
             $this->view->response($instrumentoFilt);
+            die();
            }
-           else{
+            else {
             $this->view->response("Error al completar los campos", 400); 
-           }   
+           }  
+         
         }
         }
            
@@ -85,7 +88,7 @@ class InstrumentoApiController {
         if (empty($Instrumento->instrumento) || empty($Instrumento->descripcion) || empty($Instrumento->precio)|| empty($Instrumento->id_fk)) {
             $this->view->response("Complete los datos", 400);
         } else {
-            $id = $this->model->insert($Instrumento->instrumento, $Instrumento->descripcion, $Instrumento->precio,$Instrumento->id_fk);
+            $id = $this->model->insert($Instrumento->instrumento, $Instrumento->precio, $Instrumento->descripcion,$Instrumento->id_fk);
             $Instrumento = $this->model->get($id);
             $this->view->response($Instrumento, 201);
         }

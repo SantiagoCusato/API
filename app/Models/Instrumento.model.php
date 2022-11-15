@@ -37,7 +37,7 @@ class InstrumentoModel {
     }
 
     public function insert($instrumento, $precio, $descripcion,$id_fk) {
-        $query = $this->db->prepare("INSERT INTO instrumento (instrumento, precio, descripcion,id_fk) VALUES (?, ?, ?,?)");
+        $query = $this->db->prepare("INSERT INTO instrumento (instrumento, precio, descripcion ,id_fk) VALUES (?, ?, ?,?)");
         $query->execute([$instrumento, $precio, $descripcion,$id_fk]);
 
         return $this->db->lastInsertId();
