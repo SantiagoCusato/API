@@ -42,9 +42,7 @@ class InstrumentoApiController {
             die();
            }
         }
-           else{
-              $this->view->response("Error al completar los campos", 400);
-          }
+      
         
            if(array_key_exists('sort', $_GET)){
             $filt = $_GET['sort'];
@@ -54,11 +52,7 @@ class InstrumentoApiController {
             $instrumentoFilt = $this->model->OrderBy($filt);
             $this->view->response($instrumentoFilt);
             die();
-           }
-            else {
-            $this->view->response("Error al completar los campos", 400); 
            }  
-         
         }
         }
            
