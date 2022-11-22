@@ -43,3 +43,41 @@ Para poder llevar a cabo el ordenamiento de los intrumentos del sitio se deben a
 |400| (Bad Request) La petición es inválida o no puede ser servida.
 
 |404| (Not found) No se encontro o no existe recurso.
+
+
+ENDPOINTS:
+/APIWEB2/api/Instrumentos        GET
+/APIWEB2/api/Instrumento/:ID     GET
+/APIWEB2/api/Instrumento         POST
+/APIWEB2/api/Instrumento/:ID     DELETE
+/APIWEB2/api/Instrumento/:ID     PUT
+
+
+
+
+POST Y PUT
+
+para poder agragar o editar se usa JSON como el siguiente ejemplo:
+
+{
+        "id": 6,
+        "instrumento": "Orion Platillos Solo Pro Prp10sp Splash 10 Pulgadas",
+        "precio": 11000,
+        "descripcion": "10 Pulgadas - Volumen: Medium - Sustain Medium/Largo - Control de Frecuencia: Regular/Oriental - Composición: 93% Cobre - 7% Estaño",
+        "id_fk": 1
+}
+
+
+SOBRE LOS PARAMETROS 
+
+/APIWEB2/api/Instrumentos?.....
+
+Luego del signo de pregunta se pueden agregar algunos parametros para realizar paginacion y ordenamiento, ejemplo:
+
+*Agregar el parametro "sort=" para ordenar por campo. Nombres de campos aceptables: "precio".
+
+*El parametro "order=" para mostrar los resultados de forma ascendente o descendente "ASC", "DESC", "asc" o "desc".
+
+*El parametro "limit=" para elegir la cantidad de respuestas que quiera mostrar.
+
+*El parametro "start=" para elegir de donde se empieza a mostrar.
